@@ -1,0 +1,49 @@
+package com.stats.mania.adapter
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import com.stats.mania.model.Topic
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import com.stats.mania.R
+
+@Composable
+fun TopicAdapter(
+    topic: Topic,
+    onClick : (Topic) -> Unit = {}) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .clickable {
+                onClick(topic)
+            }
+            ,
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0E0E0)),
+        shape = RoundedCornerShape(12.dp)
+        ,
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = topic.value,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                maxLines = 1
+            )
+        }
+    }
+}
