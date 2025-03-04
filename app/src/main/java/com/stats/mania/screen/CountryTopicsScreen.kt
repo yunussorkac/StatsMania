@@ -1,5 +1,6 @@
 package com.stats.mania.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
@@ -41,10 +43,14 @@ fun CountryTopicsScreen(navController : NavHostController, countryId: String, co
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Column (modifier = Modifier.fillMaxSize()
-            ) {
+            Column (modifier = Modifier.fillMaxSize().background(brush = Brush.linearGradient(
+                colors = listOf(
+                    Color(0xFF232526),
+                    Color(0xFF414345)
+                )
+            ))) {
 
-                Text(text = "Topics for $countryName", fontSize = 18.sp, color = Color.Black,
+                Text(text = "Topics for $countryName", fontSize = 18.sp, color = Color.White,
                     fontFamily = FontFamily(Font(R.font.poppins_bold))
                     , modifier = Modifier.align(Alignment.CenterHorizontally)
                         .padding(top = 10.dp))

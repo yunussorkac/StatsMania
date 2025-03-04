@@ -1,5 +1,6 @@
 package com.stats.mania.adapter
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -28,8 +29,9 @@ fun TopicAdapter(
                 onClick(topic)
             }
             ,
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0E0E0)),
-        shape = RoundedCornerShape(12.dp)
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(1.dp, Color.White)
         ,
     ) {
         Row(
@@ -40,7 +42,7 @@ fun TopicAdapter(
         ) {
             Text(
                 text = topic.value,
-                color = Color.Black,
+                color = Color.White,
                 fontFamily = FontFamily(Font(R.font.poppins_medium)),
                 maxLines = 1
             )

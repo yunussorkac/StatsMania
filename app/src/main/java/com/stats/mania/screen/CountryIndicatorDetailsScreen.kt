@@ -4,6 +4,8 @@ import android.graphics.Typeface
 import android.util.Log
 import android.view.ViewGroup
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -43,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
@@ -91,13 +95,21 @@ fun CountryIndicatorDetailsScreen(
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .background(brush = Brush.linearGradient(
+                colors = listOf(
+                    Color(0xFF232526),
+                    Color(0xFF414345)
+                )
+            ))) {
 
             // Başlık
             Text(
-                text = "$indicatorName",
+                text = "$indicatorName for $countryId",
                 fontSize = 18.sp,
-                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                color = Color.White,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 10.dp, start = 10.dp)
@@ -113,10 +125,10 @@ fun CountryIndicatorDetailsScreen(
                         countryIndicatorDetailsViewModel.previousPage(countryId, indicatorId)
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Previous Page")
+                    Icon(imageVector = Icons.Default.ArrowBack,tint = Color.White, contentDescription = "Previous Page")
                 }
 
-                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.weight(1f).padding(top = 10.dp), contentAlignment = Alignment.Center) {
                     if (isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
@@ -126,10 +138,11 @@ fun CountryIndicatorDetailsScreen(
                         Text(
                             text = "Page $currentPage of $totalPages",
                             fontSize = 16.sp,
-                            color = Color.Black,
+                            color = Color.White,
                             textAlign = TextAlign.Center
                         )
                     }
+
                 }
 
                 // Sağ ok (ileri)
@@ -138,13 +151,21 @@ fun CountryIndicatorDetailsScreen(
                         countryIndicatorDetailsViewModel.nextPage(countryId, indicatorId)
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "Next Page")
+                    Icon(imageVector = Icons.Default.ArrowForward,tint = Color.White, contentDescription = "Next Page")
                 }
+
             }
+
+
 
             // Tab Row (Sekme Row)
             TabRow(
                 selectedTabIndex = selectedTabIndex,
+                containerColor = Color.Transparent,
+                contentColor = Color.White,
+                divider = {
+
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 // Grafik sekmesi
@@ -155,7 +176,9 @@ fun CountryIndicatorDetailsScreen(
                     Text(
                         text = "Graph",
                         modifier = Modifier.padding(16.dp),
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
+
                     )
                 }
 
@@ -167,7 +190,9 @@ fun CountryIndicatorDetailsScreen(
                     Text(
                         text = "List",
                         modifier = Modifier.padding(16.dp),
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
+
                     )
                 }
             }
@@ -175,7 +200,15 @@ fun CountryIndicatorDetailsScreen(
             // Tab içerik
             when (selectedTabIndex) {
                 0 -> {
-                    // Grafik Sayfası
+                    Text(
+                        text = "$sourceNote",
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                        modifier = Modifier
+                            .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                    )
+
+
                     CustomBarChart(indicatorDetailsList)
                 }
                 1 -> {
@@ -216,7 +249,7 @@ fun CustomBarChart(
     val maxValue = indicatorDetailsList.maxOfOrNull { it.value } ?: 1.0
     val barWidth = 50.dp
     val spaceBetweenBars = 10.dp
-    val canvasHeight = 250.dp
+    val canvasHeight = 400.dp
 
     val totalBars = indicatorDetailsList.size
     val barWidthPx = with(LocalDensity.current) { barWidth.toPx() }
@@ -228,7 +261,7 @@ fun CustomBarChart(
             .fillMaxWidth()
             .height(canvasHeight)
             .horizontalScroll(rememberScrollState()) // Sağa sola kaydırılabilir yap
-            .padding(8.dp)
+            .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
     ) {
         Canvas(modifier = Modifier.width(totalChartWidth).fillMaxHeight()) {
             val canvasHeightPx = size.height
@@ -256,7 +289,7 @@ fun CustomBarChart(
                         android.graphics.Paint().apply {
                             textSize = 30f
                             textAlign = android.graphics.Paint.Align.LEFT
-                            color = android.graphics.Color.BLACK // Siyah renkli yazı
+                            color = android.graphics.Color.WHITE // Siyah renkli yazı
                         }
                     )
                 }
@@ -270,7 +303,7 @@ fun CustomBarChart(
                         android.graphics.Paint().apply {
                             textSize = 30f
                             textAlign = android.graphics.Paint.Align.LEFT
-                            color = android.graphics.Color.BLACK
+                            color = android.graphics.Color.WHITE
                         }
                     )
                 }

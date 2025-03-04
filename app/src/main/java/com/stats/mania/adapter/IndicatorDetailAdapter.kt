@@ -1,5 +1,6 @@
 package com.stats.mania.adapter
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -31,7 +32,8 @@ fun IndicatorDetailAdapter(
                 onClick(indicatorDetail)
             }
             ,
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0E0E0)),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(1.dp, Color.White),
         shape = RoundedCornerShape(12.dp)
         ,
     ) {
@@ -42,7 +44,7 @@ fun IndicatorDetailAdapter(
         ) {
             Text(
                 text = indicatorDetail.country.value,
-                color = Color.Black,
+                color = Color.White,
                 fontFamily = FontFamily(Font(R.font.poppins_medium)),
             )
             Spacer(modifier = Modifier.height(2.dp))
@@ -50,7 +52,8 @@ fun IndicatorDetailAdapter(
 
             Text(
                 text = indicatorDetail.date,
-                color = Color.Black,
+                color = Color.White,
+
                 fontFamily = FontFamily(Font(R.font.poppins_medium)),
             )
 
@@ -58,8 +61,7 @@ fun IndicatorDetailAdapter(
 
             Text(
                 text = DummyMethods.formatNumber(indicatorDetail.value) ,
-                color = Color.Blue,
-                fontSize = 12.sp,
+                color = Color(0xffffc107),
                 fontFamily = FontFamily(Font(R.font.poppins_medium)),
             )
 

@@ -64,6 +64,7 @@ fun MainContent() {
 
 
     Scaffold(
+        containerColor = Color.Transparent,
         bottomBar = {
             BottomNavigationBar(navController)
 
@@ -138,10 +139,9 @@ fun BottomNavigationBar(navController: NavController) {
         NavigationItem.Countries
     )
     BottomNavigation(
-        backgroundColor = Color.Gray,
+        backgroundColor = Color(0xFF4F524F),
         contentColor = Color.White,
-        modifier = Modifier
-            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+
 
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

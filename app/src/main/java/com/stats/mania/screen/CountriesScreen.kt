@@ -1,5 +1,6 @@
 package com.stats.mania.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -55,34 +57,41 @@ fun CountriesScreen(navController : NavHostController) {
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()
+                .background(brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFF232526),
+                        Color(0xFF414345)
+                    )
+                ))) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     // Sol ok (geri)
                     IconButton(onClick = { countriesViewModel.previousPage() }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Previous Page")
+                        Icon(imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Previous Page",tint = Color.White)
                     }
 
                     Box(modifier = Modifier.weight(1f).padding(top = 10.dp), contentAlignment = Alignment.Center) {
                         if (isLoading) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
-                                color = Color.Black
+                                color = Color.White
                             )
                         } else {
                             Text(
                                 text = "Page $currentPage of $totalPages",
                                 fontSize = 16.sp,
-                                color = Color.Black,
+                                color = Color.White,
                                 textAlign = TextAlign.Center
                             )
                         }
                     }
                     // Sağ ok (ileri)
                     IconButton(onClick = { countriesViewModel.nextPage() }) {
-                        Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "Next Page")
+                        Icon(imageVector = Icons.Default.ArrowForward,tint = Color.White, contentDescription = "Next Page")
                     }
                 }
 
