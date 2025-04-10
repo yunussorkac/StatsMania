@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.stats.mania.screen.AssistantScreen
 import com.stats.mania.screen.CountriesScreen
 import com.stats.mania.screen.CountryIndicatorDetailsScreen
 import com.stats.mania.screen.CountryIndicatorsScreen
@@ -91,6 +92,10 @@ fun Navigation(navController: NavHostController) {
             CountriesScreen(navController)
         }
 
+        composable(NavigationItem.Assistant.route) {
+            AssistantScreen(navController)
+        }
+
         composable("countryTopics?countryId={countryId}&countryName={countryName}") { backStackEntry ->
             val countryId = backStackEntry.arguments?.getString("countryId") ?: ""
             val countryName = backStackEntry.arguments?.getString("countryName") ?: ""
@@ -136,7 +141,8 @@ fun Navigation(navController: NavHostController) {
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         NavigationItem.Topics,
-        NavigationItem.Countries
+        NavigationItem.Countries,
+        NavigationItem.Assistant
     )
     BottomNavigation(
         backgroundColor = Color(0xFF4F524F),
