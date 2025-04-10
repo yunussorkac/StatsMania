@@ -1,6 +1,7 @@
 package com.stats.mania.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,13 +17,12 @@ class CountriesViewModel(private val apiService: ApiService) : ViewModel() {
 
     val countries = mutableStateOf<List<Country>>(emptyList())
     val errorMessage = mutableStateOf<String?>(null)
-    val currentPage = mutableStateOf(1)
-    val totalPages = mutableStateOf(1)
+    val currentPage = mutableIntStateOf(1)
+    val totalPages = mutableIntStateOf(1)
     val isLoading = mutableStateOf(false)
 
-    // Sayfa verilerini çekme fonksiyonu
     fun fetchCountries(page: Int) {
-        if (isLoading.value || page > totalPages.value) return
+        if (isLoading.value || page > totalPages.intValue) return
 
         isLoading.value = true
 
@@ -61,17 +61,17 @@ class CountriesViewModel(private val apiService: ApiService) : ViewModel() {
 
     // Sayfayı ileri al
     fun nextPage() {
-        if (currentPage.value < totalPages.value) {
-            currentPage.value++
-            fetchCountries(currentPage.value)
+        if (currentPage.intValue < totalPages.intValue) {
+            currentPage.intValue++
+            fetchCountries(currentPage.intValue)
         }
     }
 
     // Sayfayı geri al
     fun previousPage() {
-        if (currentPage.value > 1) {
-            currentPage.value--
-            fetchCountries(currentPage.value)
+        if (currentPage.intValue > 1) {
+            currentPage.intValue--
+            fetchCountries(currentPage.intValue)
         }
     }
 }

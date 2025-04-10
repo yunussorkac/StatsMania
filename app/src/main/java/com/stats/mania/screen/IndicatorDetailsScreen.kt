@@ -84,7 +84,6 @@ fun IndicatorDetailsScreen(navController: NavHostController, indicatorId: String
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Sol ok (geri)
                     IconButton(
                         onClick = {
                             indicatorDetailsViewModel.previousPage(indicatorId)
@@ -109,7 +108,6 @@ fun IndicatorDetailsScreen(navController: NavHostController, indicatorId: String
                         }
                     }
 
-                    // Sağ ok (ileri)
                     IconButton(
                         onClick = {
                             indicatorDetailsViewModel.nextPage(indicatorId)

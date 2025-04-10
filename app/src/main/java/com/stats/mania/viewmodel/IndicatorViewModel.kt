@@ -1,6 +1,7 @@
 package com.stats.mania.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,13 +19,12 @@ class IndicatorViewModel(private val apiService: ApiService) : ViewModel() {
 
     val indicators = mutableStateOf<List<Indicator>>(emptyList())
     val errorMessage = mutableStateOf<String?>(null)
-    val currentPage = mutableStateOf(1)
-    val totalPages = mutableStateOf(1)
+    val currentPage = mutableIntStateOf(1)
+    val totalPages = mutableIntStateOf(1)
     val isLoading = mutableStateOf(false)
 
-    // Sayfa verilerini çekme fonksiyonu
     fun fetchIndicators(id: String, page: Int) {
-        if (isLoading.value || page > totalPages.value) return
+        if (isLoading.value || page > totalPages.intValue) return
 
         isLoading.value = true
         Log.d("IndicatorViewModel", "Fetching indicators for page $page with topicId: $id")
@@ -43,7 +43,7 @@ class IndicatorViewModel(private val apiService: ApiService) : ViewModel() {
                         // Toplam sayfa sayısını belirle
                         val metaData = Gson().fromJson(Gson().toJson(body[0]), Meta::class.java)
                         totalPages.value = metaData.pages
-                        Log.d("IndicatorViewModel", "Total Pages: ${totalPages.value}")
+                        Log.d("IndicatorViewModel", "Total Pages: ${totalPages.intValue}")
                     }
                 } else {
                     errorMessage.value = "Error: ${response.code()}"
@@ -63,17 +63,17 @@ class IndicatorViewModel(private val apiService: ApiService) : ViewModel() {
 
     // Sayfayı ileri al
     fun nextPage(id: String) {
-        if (currentPage.value < totalPages.value) {
-            currentPage.value++
-            fetchIndicators(id, currentPage.value)
+        if (currentPage.intValue < totalPages.intValue) {
+            currentPage.intValue++
+            fetchIndicators(id, currentPage.intValue)
         }
     }
 
     // Sayfayı geri al
     fun previousPage(id: String) {
-        if (currentPage.value > 1) {
-            currentPage.value--
-            fetchIndicators(id, currentPage.value)
+        if (currentPage.intValue > 1) {
+            currentPage.intValue--
+            fetchIndicators(id, currentPage.intValue)
         }
     }
 }

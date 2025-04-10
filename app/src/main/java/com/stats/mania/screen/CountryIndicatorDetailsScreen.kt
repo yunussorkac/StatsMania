@@ -96,7 +96,6 @@ fun CountryIndicatorDetailsScreen(
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .background(brush = Brush.linearGradient(
                 colors = listOf(
                     Color(0xFF232526),
@@ -104,7 +103,6 @@ fun CountryIndicatorDetailsScreen(
                 )
             ))) {
 
-            // Başlık
             Text(
                 text = "$indicatorName for $countryId",
                 fontSize = 18.sp,
@@ -119,7 +117,6 @@ fun CountryIndicatorDetailsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Sol ok (geri)
                 IconButton(
                     onClick = {
                         countryIndicatorDetailsViewModel.previousPage(countryId, indicatorId)
@@ -145,7 +142,6 @@ fun CountryIndicatorDetailsScreen(
 
                 }
 
-                // Sağ ok (ileri)
                 IconButton(
                     onClick = {
                         countryIndicatorDetailsViewModel.nextPage(countryId, indicatorId)
@@ -158,7 +154,6 @@ fun CountryIndicatorDetailsScreen(
 
 
 
-            // Tab Row (Sekme Row)
             TabRow(
                 selectedTabIndex = selectedTabIndex,
                 containerColor = Color.Transparent,
@@ -168,7 +163,6 @@ fun CountryIndicatorDetailsScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Grafik sekmesi
                 Tab(
                     selected = selectedTabIndex == 0,
                     onClick = { selectedTabIndex = 0 }
@@ -179,10 +173,9 @@ fun CountryIndicatorDetailsScreen(
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_medium)),
 
-                    )
+                        )
                 }
 
-                // Liste sekmesi
                 Tab(
                     selected = selectedTabIndex == 1,
                     onClick = { selectedTabIndex = 1 }
@@ -193,11 +186,10 @@ fun CountryIndicatorDetailsScreen(
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_medium)),
 
-                    )
+                        )
                 }
             }
 
-            // Tab içerik
             when (selectedTabIndex) {
                 0 -> {
                     Text(
@@ -205,6 +197,9 @@ fun CountryIndicatorDetailsScreen(
                         color = Color.White,
                         fontFamily = FontFamily(Font(R.font.poppins_medium)),
                         modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
+                            .verticalScroll(rememberScrollState())
                             .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                     )
 
@@ -212,7 +207,6 @@ fun CountryIndicatorDetailsScreen(
                     CustomBarChart(indicatorDetailsList)
                 }
                 1 -> {
-                    // Liste Sayfası
                     LazyColumn(
                         modifier = Modifier.fillMaxSize().padding(top = 8.dp),
                         state = listState,
@@ -235,7 +229,6 @@ fun CountryIndicatorDetailsScreen(
                 }
             }
 
-            // Sayfa navigasyonu
 
         }
     }
@@ -256,58 +249,64 @@ fun CustomBarChart(
     val spaceBetweenBarsPx = with(LocalDensity.current) { spaceBetweenBars.toPx() }
     val totalChartWidth = (totalBars * barWidthPx + (totalBars - 1) * spaceBetweenBarsPx).dp
 
-    Box(
-        modifier = modifier
+    Column(
+        modifier = Modifier
             .fillMaxWidth()
             .height(canvasHeight)
-            .horizontalScroll(rememberScrollState()) // Sağa sola kaydırılabilir yap
-            .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        Canvas(modifier = Modifier.width(totalChartWidth).fillMaxHeight()) {
-            val canvasHeightPx = size.height
-            val maxBarHeight = canvasHeightPx * 0.8f  // Maksimum yüksekliğin %80'ini kaplasın
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(canvasHeight)
+                .horizontalScroll(rememberScrollState())
+                .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+        ) {
+            Canvas(modifier = Modifier.width(totalChartWidth).fillMaxHeight()) {
+                val canvasHeightPx = size.height
+                val maxBarHeight = canvasHeightPx * 0.8f
 
-            indicatorDetailsList.forEachIndexed { index, detail ->
-                val barHeight = (detail.value / maxValue).toFloat() * maxBarHeight
-                val xOffset = index * (barWidthPx + spaceBetweenBarsPx)
-                val barTop = canvasHeightPx - barHeight
+                indicatorDetailsList.forEachIndexed { index, detail ->
+                    val barHeight = (detail.value / maxValue).toFloat() * maxBarHeight
+                    val xOffset = index * (barWidthPx + spaceBetweenBarsPx)
+                    val barTop = canvasHeightPx - barHeight
 
-                val barColor = if (index % 2 == 0) AppBlue else Color(0xFFFFA500) // Turuncu için HEX değeri
+                    val barColor = if (index % 2 == 0) AppBlue else Color(0xFFFFA500)
 
-                drawRect(
-                    color = barColor,
-                    topLeft = Offset(xOffset, barTop),
-                    size = Size(barWidthPx, barHeight)
-                )
-
-                // Sütun içindeki değerleri yaz (sütunun üstüne dışarıda)
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        DummyMethods.formatNumber(detail.value),
-                        xOffset + barWidthPx / 4,
-                        barTop - 10f,  // Barın üst kısmına konumlandır, biraz yukarıda
-                        android.graphics.Paint().apply {
-                            textSize = 30f
-                            textAlign = android.graphics.Paint.Align.LEFT
-                            color = android.graphics.Color.WHITE // Siyah renkli yazı
-                        }
+                    drawRect(
+                        color = barColor,
+                        topLeft = Offset(xOffset, barTop),
+                        size = Size(barWidthPx, barHeight)
                     )
-                }
 
-                // Tarih etiketleri (x ekseni)
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        detail.date,
-                        xOffset + barWidthPx / 4,
-                        canvasHeightPx + 30f,  // Çubuğun biraz altına konumlandır
-                        android.graphics.Paint().apply {
-                            textSize = 30f
-                            textAlign = android.graphics.Paint.Align.LEFT
-                            color = android.graphics.Color.WHITE
-                        }
-                    )
+                    drawContext.canvas.nativeCanvas.apply {
+                        drawText(
+                            DummyMethods.formatNumber(detail.value),
+                            xOffset + barWidthPx / 4,
+                            barTop - 10f,
+                            android.graphics.Paint().apply {
+                                textSize = 30f
+                                textAlign = android.graphics.Paint.Align.LEFT
+                                color = android.graphics.Color.WHITE
+                            }
+                        )
+                    }
+
+                    drawContext.canvas.nativeCanvas.apply {
+                        drawText(
+                            detail.date,
+                            xOffset + barWidthPx / 4,
+                            canvasHeightPx + 30f,
+                            android.graphics.Paint().apply {
+                                textSize = 30f
+                                textAlign = android.graphics.Paint.Align.LEFT
+                                color = android.graphics.Color.WHITE
+                            }
+                        )
+                    }
                 }
             }
         }
+
     }
 }

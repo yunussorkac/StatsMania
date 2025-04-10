@@ -68,7 +68,6 @@ fun CountriesScreen(navController : NavHostController) {
                     modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Sol ok (geri)
                     IconButton(onClick = { countriesViewModel.previousPage() }) {
                         Icon(imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Previous Page",tint = Color.White)
@@ -89,7 +88,6 @@ fun CountriesScreen(navController : NavHostController) {
                             )
                         }
                     }
-                    // Sağ ok (ileri)
                     IconButton(onClick = { countriesViewModel.nextPage() }) {
                         Icon(imageVector = Icons.Default.ArrowForward,tint = Color.White, contentDescription = "Next Page")
                     }

@@ -68,7 +68,6 @@ fun CountryIndicatorsScreen(navController: NavHostController, topicId: String, t
     val filteredIndicators = indicatorList.filter { it.name.contains(searchQuery, ignoreCase = true) }
 
 
-    // Sayfa verilerini yükle
     LaunchedEffect(currentPage) {
         indicatorViewModel.fetchIndicators(topicId, currentPage)
         listState.scrollToItem(0)
@@ -106,15 +105,15 @@ fun CountryIndicatorsScreen(navController: NavHostController, topicId: String, t
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .clip(RoundedCornerShape(30.dp)) // Oval kenarlar
-                        .border(1.dp, Color.White, RoundedCornerShape(30.dp)) // Beyaz çerçeve
-                        .background(Color.Transparent), // Şeffaf arka plan
+                        .clip(RoundedCornerShape(30.dp))
+                        .border(1.dp, Color.White, RoundedCornerShape(30.dp))
+                        .background(Color.Transparent),
                     colors = TextFieldDefaults.colors(
-                        unfocusedIndicatorColor = Color.Transparent, // Alt çizgiyi kaldırır
-                        focusedIndicatorColor = Color.Transparent,   // Alt çizgiyi kaldırır
-                        disabledIndicatorColor = Color.Transparent,  // Alt çizgiyi kaldırır
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
                         errorIndicatorColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,  // Şeffaf arka plan
+                        focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White
@@ -125,7 +124,6 @@ fun CountryIndicatorsScreen(navController: NavHostController, topicId: String, t
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Sol ok (geri)
                     IconButton(onClick = { indicatorViewModel.previousPage(topicId)
                         searchQuery = ""
                     }) {
@@ -147,7 +145,6 @@ fun CountryIndicatorsScreen(navController: NavHostController, topicId: String, t
                             )
                         }
                     }
-                    // Sağ ok (ileri)
                     IconButton(onClick = { indicatorViewModel.nextPage(topicId)
                         searchQuery = ""
                     }) {

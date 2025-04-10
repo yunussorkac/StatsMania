@@ -1,6 +1,7 @@
 package com.stats.mania.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,12 +21,12 @@ class CountryIndicatorDetailsViewModel(private val apiService: ApiService) : Vie
 
     val countryIndicatorDetails = mutableStateOf<List<IndicatorDetail>>(emptyList())
     val errorMessage = mutableStateOf<String?>(null)
-    val currentPage = mutableStateOf(1)
-    val totalPages = mutableStateOf(1) // Yeni değişken eklendi
+    val currentPage = mutableIntStateOf(1)
+    val totalPages = mutableIntStateOf(1)
     val isLoading = mutableStateOf(false)
 
     fun fetchCountryIndicatorDetails(countryCode: String, id: String, page: Int) {
-        if (isLoading.value || page > totalPages.value) return // Son sayfadaysak yeni istek yapma
+        if (isLoading.value || page > totalPages.intValue) return
 
         isLoading.value = true
         Log.d("IndicatorViewModel", "Fetching indicators for page $page with topicId: $id")
@@ -44,7 +45,6 @@ class CountryIndicatorDetailsViewModel(private val apiService: ApiService) : Vie
                     val jsonElement = body[1]
                     val jsonString = Gson().toJson(jsonElement)
 
-                    // JSON verisini güvenli bir şekilde listeye dönüştür
                     val type = object : TypeToken<List<IndicatorDetail>>() {}.type
                     val dataList: List<IndicatorDetail>? = try {
                         Gson().fromJson(jsonString, type)
@@ -60,10 +60,8 @@ class CountryIndicatorDetailsViewModel(private val apiService: ApiService) : Vie
 
                     Log.d("IndicatorDetailsCountryViewModel", "Received ${dataList.size} indicators for page $page")
 
-                    // İlk sayfada önceki verileri sıfırla, yoksa ekle
                     countryIndicatorDetails.value = if (page == 1) dataList else dataList
 
-                    // Meta verisini güvenli bir şekilde al
                     val metaDataJson = Gson().toJson(body[0])
                     val metaData: Meta? = try {
                         Gson().fromJson(metaDataJson, Meta::class.java)

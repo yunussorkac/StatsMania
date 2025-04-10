@@ -1,6 +1,7 @@
 package com.stats.mania.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,12 +19,12 @@ class IndicatorDetailsViewModel(private val apiService: ApiService) : ViewModel(
 
     val indicatorDetails = mutableStateOf<List<IndicatorDetail>>(emptyList())
     val errorMessage = mutableStateOf<String?>(null)
-    val currentPage = mutableStateOf(1)
-    val totalPages = mutableStateOf(1) // Yeni değişken eklendi
+    val currentPage = mutableIntStateOf(1)
+    val totalPages = mutableIntStateOf(1) // Yeni değişken eklendi
     val isLoading = mutableStateOf(false)
 
     fun fetchIndicatorDetails(id: String, page: Int) {
-        if (isLoading.value || page > totalPages.value) return // Son sayfadaysak yeni istek yapma
+        if (isLoading.value || page > totalPages.intValue) return // Son sayfadaysak yeni istek yapma
 
         isLoading.value = true
         Log.d("IndicatorViewModel", "Fetching indicators for page $page with topicId: $id")
@@ -93,17 +94,17 @@ class IndicatorDetailsViewModel(private val apiService: ApiService) : ViewModel(
 
 
     fun nextPage(id: String) {
-        if (currentPage.value < totalPages.value) {
-            currentPage.value++
-            fetchIndicatorDetails(id, currentPage.value)
+        if (currentPage.intValue < totalPages.intValue) {
+            currentPage.intValue++
+            fetchIndicatorDetails(id, currentPage.intValue)
         }
     }
 
     // Sayfayı geri al
     fun previousPage(id: String) {
-        if (currentPage.value > 1) {
-            currentPage.value--
-            fetchIndicatorDetails(id, currentPage.value)
+        if (currentPage.intValue > 1) {
+            currentPage.intValue--
+            fetchIndicatorDetails(id, currentPage.intValue)
         }
     }
 
